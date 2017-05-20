@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--<color name="background_color">#F7F4ED</color>-->
+    <color name="game_back_color">#82CFD1</color>
+    <color name="game_dark_color">#4FB0B6</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="my_yellow">#FEC107</color>
+
+    <color name="dark_gray">#9E9E9E</color>
+    <color name="my_red">#f44336</color>
+    <color name="my_green">#27AD5F</color>
+    <color name="light_gray">#EEEEEE</color>
+    <color name="light_yellow">#FFD75E</color>
+
+
+</resources>

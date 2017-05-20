@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="toolbar_height">56dp</dimen>
+    <dimen name="font_verysmall">9sp</dimen>
+    <dimen name="font_small">13sp</dimen>
+    <dimen name="font_normal">15sp</dimen>
+    <dimen name="font_large">18sp</dimen>
+    <dimen name="font_verylarge">22sp</dimen>
+
+
+
+
+    <dimen name="standard_big_margin">16dp</dimen>  <dimen name="standard_small_margin">8dp</dimen>
+    <dimen name="standard_large_margin">32dp</dimen>
+    <dimen name="standard_button_height">36dp</dimen>
+
+    <dimen name="elevation">2dp</dimen>
+    <dimen name="corner_radius">2dp</dimen>
+    <dimen name="margin_forElevation">3dp</dimen>
+
+</resources>

@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_question_splash"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/game_back_color"
+    tools:context="org.offsee.offseequestionmodule.QuestionSplashActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/game_footer_mdpi"></LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/tunnelLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/game_tunel_mdpi"></RelativeLayout>
+
+
+    <Button
+        android:id="@+id/startButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/tunnelLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/score_question_shape"
+        android:enabled="false"
+        android:minEms="7"
+        android:onClick="onStartButtonClick"
+        android:paddingBottom="5dp"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:paddingTop="5dp"
+        android:text="@string/startGame"
+        android:textColor="@color/black"
+        android:textSize="@dimen/font_large" />
+
+    <ProgressBar
+        android:id="@+id/startProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/tunnelLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:id="@+id/boxesLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/startButton"
+        android:layout_marginBottom="10dp">
+
+        <ImageView
+            android:id="@+id/leftBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/standard_big_margin"
+            android:src="@drawable/game_box_hdpi" />
+
+        <ImageView
+            android:id="@+id/rightBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/standard_big_margin"
+            android:src="@drawable/game_box_hdpi" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/boxesLayout"
+        android:layout_marginBottom="10dp">
+
+        <ImageView
+            android:id="@+id/leftCloud"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/game_cloud_leftmdpi" />
+
+        <ImageView
+            android:id="@+id/rightCloud"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/game_cloud_rightmdpi" />
+
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbar_height"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/soundIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/standard_big_margin"
+                />
+
+        </LinearLayout>
+
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/topCardview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/standard_small_margin"
+            android:layout_marginLeft="@dimen/standard_big_margin"
+            android:layout_marginRight="@dimen/standard_big_margin"
+            android:padding="4dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="8dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="200dp">
+
+                <LinearLayout
+                    android:id="@+id/dataLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="@dimen/standard_big_margin"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/totalScoreTextview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="@dimen/standard_big_margin"
+                        android:drawableTop="@drawable/game_coin_hdpi"
+                        android:gravity="center"
+                        android:text="1500 امتیاز"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/font_large" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/timeTextview"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="120 ثانیه"
+                            android:textColor="@color/dark_gray"
+                            android:textSize="@dimen/font_normal" />
+
+                        <TextView
+                            android:id="@+id/questionTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="12 سوال"
+                            android:textColor="@color/dark_gray"
+                            android:textSize="@dimen/font_normal" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/descripGameTextview"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:gravity="center"
+                        android:text="برای کسب جایزه این بازی حداقل باید به ss سوال پاسخ صحیح دهید"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/font_small" />
+
+
+                </LinearLayout>
+
+
+                <ProgressBar
+
+                    android:id="@+id/progressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true" />
+
+
+                <Button
+                    android:id="@+id/tryButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_centerInParent="true"
+                    android:layout_margin="2dp"
+                    android:background="@drawable/yellow_buttons"
+                    android:elevation="1dp"
+                    android:onClick="onTryAgain"
+                    android:paddingLeft="@dimen/standard_big_margin"
+                    android:paddingRight="@dimen/standard_big_margin"
+                    android:stateListAnimator="@null"
+                    android:text="@string/tryAgain"
+                    android:textColor="@color/black"
+                    android:visibility="gone" />
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

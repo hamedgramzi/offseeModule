@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_question"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/game_back_color"
+    tools:context="org.offsee.offseequestionmodule.QuestionActivity">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/game_footer_mdpi"></LinearLayout>
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp">
+
+        <ImageView
+            android:id="@+id/soundIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="18dp"
+            />
+
+        <org.offsee.offseequestionmodule.utils.circleprogress.DonutProgress
+            android:id="@+id/donut_progress"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/standard_big_margin"
+            android:layout_toRightOf="@id/soundIcon"
+            app:donut_background_color="@color/white"
+            app:donut_finished_color="@color/my_green"
+            app:donut_finished_stroke_width="4dp"
+            app:donut_prefix_text=""
+            app:donut_progress="30"
+            app:donut_suffix_text=""
+            app:donut_text="56"
+            app:donut_text_color="@color/dark_gray"
+            app:donut_text_size="10sp"
+            app:donut_unfinished_color="@color/white"
+            app:donut_unfinished_stroke_width="4dp" />
+
+        <TextView
+            android:id="@+id/scoreTextview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:drawablePadding="10dp"
+            android:drawableRight="@drawable/game_coin_hdpi"
+            android:gravity="center"
+            android:paddingBottom="4dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="4dp"
+            android:text="0 تومان"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/earnScoreTextview"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="80dp"
+        android:background="@drawable/earn_score"
+        android:gravity="center"
+        android:text="+1"
+        android:textColor="@color/my_yellow"
+        android:textSize="@dimen/font_small"
+        android:visibility="gone" />
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/questionCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:layout_marginBottom="@dimen/standard_small_margin"
+        android:layout_marginLeft="@dimen/standard_big_margin"
+        android:layout_marginRight="@dimen/standard_big_margin"
+        android:layout_marginTop="@dimen/standard_small_margin"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="8dp"
+        app:cardUseCompatPadding="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="170dp"
+            android:padding="@dimen/standard_big_margin">
+
+            <TextView
+                android:id="@+id/questionScoreTextview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="50"
+                android:textColor="@color/dark_gray"
+                android:textSize="@dimen/font_small" />
+
+            <TextView
+                android:id="@+id/numberQuestionTextview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="4dp"
+                android:text="7/10"
+                android:textColor="@color/dark_gray"
+                android:textSize="@dimen/font_normal" />
+
+
+            <TextView
+                android:id="@+id/questionTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:minLines="2"
+                android:text="تست تست تست تست تست تست"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_large" />
+
+
+            <ImageView
+                android:id="@+id/questionPic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/numberQuestionTextview"
+                android:layout_centerHorizontal="true"
+                android:adjustViewBounds="true"
+                android:maxHeight="120dp"
+                android:visibility="gone" />
+
+
+        </RelativeLayout>
+
+
+    </android.support.v7.widget.CardView>
+
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/sponsorCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:layout_marginBottom="@dimen/standard_small_margin"
+        android:layout_marginLeft="@dimen/standard_big_margin"
+        android:layout_marginRight="@dimen/standard_big_margin"
+        android:layout_marginTop="@dimen/standard_small_margin"
+        android:visibility="gone"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="8dp"
+        app:cardUseCompatPadding="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/standard_big_margin">
+
+            <ImageView
+                android:id="@+id/sponsorLogoImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_margin="@dimen/standard_small_margin"
+                android:adjustViewBounds="true"
+                android:maxHeight="80dp"
+                android:src="@drawable/logo_ldpi" />
+
+            <TextView
+                android:id="@+id/sponsorNameTextview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/standard_small_margin"
+                android:text="@string/app_name"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_verylarge" />
+
+            <TextView
+                android:id="@+id/noteSponsorTextview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_margin="@dimen/standard_small_margin"
+                android:lines="2"
+                android:text="بازی کن، پول جمع کن، تاکسی بگیر"
+                android:textColor="@color/dark_gray"
+                android:textSize="@dimen/font_normal" />
+
+        </LinearLayout>
+
+
+    </android.support.v7.widget.CardView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/questionCard"
+        android:layout_marginBottom="30dp"
+        android:layout_marginTop="30dp"
+        android:gravity="bottom"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/standard_small_margin"
+            android:layout_marginTop="@dimen/standard_big_margin"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/ansTextview1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/standard_big_margin"
+                android:layout_marginRight="@dimen/standard_small_margin"
+                android:layout_weight="1"
+                android:background="@drawable/question_ans_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="onAnswerClick"
+                android:padding="@dimen/standard_small_margin"
+                android:text="تست تست"
+                android:textColor="@color/question_ans_text_selector"
+                android:textSize="@dimen/font_small" />
+
+            <TextView
+                android:id="@+id/ansTextview2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/standard_small_margin"
+                android:layout_marginRight="@dimen/standard_big_margin"
+                android:layout_weight="1"
+                android:background="@drawable/question_ans_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="onAnswerClick"
+                android:padding="@dimen/standard_small_margin"
+                android:textColor="@color/question_ans_text_selector"
+                android:textSize="@dimen/font_small" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/standard_big_margin"
+            android:layout_marginTop="@dimen/standard_small_margin"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/ansTextview3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/standard_big_margin"
+                android:layout_marginRight="@dimen/standard_small_margin"
+                android:layout_weight="1"
+                android:background="@drawable/question_ans_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="onAnswerClick"
+                android:padding="@dimen/standard_small_margin"
+                android:textColor="@color/question_ans_text_selector"
+
+                android:textSize="@dimen/font_small" />
+
+            <TextView
+                android:id="@+id/ansTextview4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/standard_small_margin"
+                android:layout_marginRight="@dimen/standard_big_margin"
+                android:layout_weight="1"
+                android:background="@drawable/question_ans_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="onAnswerClick"
+                android:padding="@dimen/standard_small_margin"
+                android:textColor="@color/question_ans_text_selector"
+                android:textSize="@dimen/font_small" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/layoutOnButtons"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/questionCard"
+        android:clickable="true"
+        android:onClick="onAlakiClick"
+        android:visibility="gone"></RelativeLayout>
+
+    <TextView
+        android:id="@+id/positiveTextview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginRight="16dp"
+        android:text="0 درست"
+        android:textColor="@color/white" />
+
+    <ImageView
+        android:id="@+id/testImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible" />
+
+
+</RelativeLayout>
