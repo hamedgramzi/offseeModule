@@ -1,5 +1,6 @@
 package org.offsee.offseequestionmodule;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,11 +11,13 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,6 +28,8 @@ import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import org.offsee.offseequestionmodule.model.GamePlayInfo;
 import org.offsee.offseequestionmodule.model.Question;
@@ -59,7 +64,7 @@ public class QuestionSplashActivity extends AppCompatActivity {
     ProgressBar startProgress;
     OnGameStatusListener onGameStatusListener;
     boolean isSelfFinish = false;
-
+    LinearLayout sponsorLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,7 +83,7 @@ public class QuestionSplashActivity extends AppCompatActivity {
 
         cloudLeft = (ImageView) findViewById(R.id.leftCloud);
         cloudRight = (ImageView) findViewById(R.id.rightCloud);
-
+        sponsorLayout  = (LinearLayout) findViewById(R.id.sponsorLayout);
         topCardview = (CardView) findViewById(R.id.topCardview);
         tunnelLayout = (RelativeLayout) findViewById(R.id.tunnelLayout);
         startProgress = (ProgressBar) findViewById(R.id.startProgress);
@@ -88,11 +93,11 @@ public class QuestionSplashActivity extends AppCompatActivity {
 //        startProgress.setIndeterminateDrawable(doubleBounce);
 
         soundIcon = (ImageView) findViewById(R.id.soundIcon);
-        StateListDrawable states = new StateListDrawable();
+//        StateListDrawable states = new StateListDrawable();
         //change
-        //states.addState(new int[]{android.R.attr.state_selected}, App.getIcon(TaxcityFont.Icon.icon_volume_on, R.color.white));
-        //states.addState(new int[]{}, App.getIcon(TaxcityFont.Icon.icon_volume_off, R.color.white));
-        soundIcon.setImageDrawable(states);
+//        states.addState(new int[]{android.R.attr.state_selected}, R.drawable.);
+//        states.addState(new int[]{}, App.getIcon(TaxcityFont.Icon.icon_volume_off, R.color.white));
+//        soundIcon.setImageDrawable(states);
         soundStatus = App.sp.getBoolean(getString(R.string.pref_game_sound), true);
         soundIcon.setSelected(soundStatus);
         soundIcon.setOnClickListener(new View.OnClickListener() {
@@ -104,8 +109,8 @@ public class QuestionSplashActivity extends AppCompatActivity {
                 if (soundStatus) {
                     startSound();
                 } else {
-                    if (mediaPlayer != null) {
-                        mediaPlayer.pause();
+                    if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+                        mediaPlayer.stop();
                     }
                 }
             }
@@ -130,15 +135,19 @@ public class QuestionSplashActivity extends AppCompatActivity {
     }
 
     int gamePlayId = 0;
-
+    Location location;
     private void getQuestion() {
-        Location location = App.getLastKnownLocation();
         if (location == null) {
-            Toast.makeText(QuestionSplashActivity.this, "دسترسی به موقعیت شما وجود ندارد", Toast.LENGTH_SHORT).show();
-            progressBar.setVisibility(View.GONE);
-            tryButton.setVisibility(View.VISIBLE);
-            startButton.setEnabled(false);
-            return;
+            location = App.getLastKnownLocation();
+            if (location == null || (location != null && location.getLatitude() == 0.0 && location.getLongitude() == 0.0)) {
+                //sendBroadcast(new Intent(this, LocationChangeBroadCastReciever.class));
+                Toast.makeText(QuestionSplashActivity.this, "دسترسی به موقعیت شما وجود ندارد", Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
+                tryButton.setVisibility(View.VISIBLE);
+                startButton.setEnabled(false);
+                location = null;
+                return;
+            }
         }
         ApiManagerInvoke.addGamePlayQOK(location, new GoResponseHandler<MessageContract<GamePlayInfo>>() {
             @Override
@@ -157,6 +166,8 @@ public class QuestionSplashActivity extends AppCompatActivity {
                             questionTextView.setText(maxQuestion + " " + getString(R.string.question));
                             descripGameTextview.setText(descripGameTextview.getText().toString().replace("ss", minQiestoin + ""));
                             startButton.setEnabled(true);
+                            doSponsorImages(listMessageContract.data.sponsorImages);
+
                         }
                     });
 
@@ -213,8 +224,8 @@ public class QuestionSplashActivity extends AppCompatActivity {
             if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED) {
                 // Permission to access the location is missing.
-                PermissionUtils.requestPermission(this, LOCATION_PERMISSION_REQUEST_CODE,
-                        android.Manifest.permission.ACCESS_FINE_LOCATION, true);
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+
                 return false;
             } else {
                 return true;
@@ -364,5 +375,43 @@ public class QuestionSplashActivity extends AppCompatActivity {
             onGameStatusListener.onCancel();
         }
         OffseeApi.unregisterActivity(this);
+    }
+
+    private void doSponsorImages(List<String> images) {
+        if(images.size() == 0 ){
+            sponsorLayout.setVisibility(View.GONE);
+            return;
+        }
+        for (int i = 0; i < images.size(); i++) {
+            for (int j = i; j < images.size(); j++) {
+                if (i != j && images.get(i).equals(images.get(j))) {
+                    images.remove(j);
+                    j--;
+                }
+            }
+        }
+        for (int i = 0; i < images.size(); i++) {
+            final ImageView imageView = new ImageView(this);
+            //imageView.setBorderColor(Color.TRANSPARENT);
+            //imageView.setBorderWidth(0);
+
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            imageView.setLayoutParams(layoutParams);
+            imageView.setAdjustViewBounds(true);
+            Picasso.with(App.getContext()).load(images.get(i)).noFade().into(imageView, new Callback() {
+                @Override
+                public void onSuccess() {
+                    sponsorLayout.addView(imageView);
+                }
+
+                @Override
+                public void onError() {
+
+                }
+            });
+
+
+        }
+
     }
 }

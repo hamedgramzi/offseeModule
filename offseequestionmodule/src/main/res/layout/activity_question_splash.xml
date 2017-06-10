@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/game_back_color"
-    tools:context="org.offsee.offseequestionmodule.QuestionSplashActivity">
+    tools:context=".QuestionSplashActivity">
 
 
     <LinearLayout
@@ -102,6 +102,7 @@
 
 
     <LinearLayout
+        android:id="@+id/topCardLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -116,7 +117,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/standard_big_margin"
-                />
+                android:src="@drawable/volume_selector" />
 
         </LinearLayout>
 
@@ -147,16 +148,46 @@
                     android:padding="@dimen/standard_big_margin"
                     android:visibility="gone">
 
-                    <TextView
-                        android:id="@+id/totalScoreTextview"
+                    <RelativeLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:drawablePadding="@dimen/standard_big_margin"
-                        android:drawableTop="@drawable/game_coin_hdpi"
-                        android:gravity="center"
-                        android:text="1500 امتیاز"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/font_large" />
+                        android:orientation="horizontal">
+
+
+                        <ImageView
+                            android:id="@+id/coinImageView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:adjustViewBounds="true"
+                            android:maxHeight="100dp"
+                            android:src="@drawable/game_coin_xxhdpi" />
+
+                        <TextView
+                            android:id="@+id/totalScoreTextview"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBottom="@id/coinImageView"
+                            android:background="@drawable/game_start_ninepatch"
+                            android:drawablePadding="@dimen/standard_big_margin"
+                            android:gravity="center"
+                            android:lines="1"
+                            android:paddingLeft="@dimen/standard_big_margin"
+                            android:paddingRight="@dimen/standard_big_margin"
+                            android:singleLine="true"
+                            android:text="150000 تومان"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/font_large" />
+
+                        <!--<ImageView-->
+                        <!--android:id="@+id/boostIcon"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:src="@drawable/x2_hdpi"-->
+                        <!--android:visibility="gone"-->
+                        <!--/>-->
+
+                    </RelativeLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -196,6 +227,15 @@
                         android:textColor="@color/black"
                         android:textSize="@dimen/font_small" />
 
+                    <LinearLayout
+                        android:id="@+id/sponsorLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_below="@+id/topCardLayout"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:orientation="horizontal" />
+
 
                 </LinearLayout>
 
@@ -223,6 +263,7 @@
                     android:text="@string/tryAgain"
                     android:textColor="@color/black"
                     android:visibility="gone" />
+
 
             </RelativeLayout>
 

@@ -35,9 +35,12 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:25.3.1'
-    //compile project(':offseequestionmodule')
-
-//    compile 'com.github.hamedgramzi:offseeModule:-SNAPSHOT'
+    compile project(':offseequestionmodule')
     //compile 'com.github.hamedgramzi:offseeModule:master-SNAPSHOT'
-    compile project(path: ':offseequestionmodule')
+}
+
+
+
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
