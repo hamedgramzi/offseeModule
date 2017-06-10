@@ -15,7 +15,7 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.example.offseequestionmodule.R;
+import org.offsee.offseequestionmodule.R;
 
 /**
  * Created by bruce on 14-10-30.

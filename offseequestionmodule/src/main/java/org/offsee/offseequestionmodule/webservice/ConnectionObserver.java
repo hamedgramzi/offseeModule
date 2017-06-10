@@ -9,4 +9,6 @@ import signalgo.client.GoSocketListener;
 public interface ConnectionObserver {
 
     void onServerChange(GoSocketListener.SocketState lState, GoSocketListener.SocketState cState, boolean isConnected);
+
+    void onLogin(boolean isLogin);
 }

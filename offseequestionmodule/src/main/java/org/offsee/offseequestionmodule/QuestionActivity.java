@@ -18,6 +18,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.text.TextPaint;
+import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -29,7 +30,6 @@ import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
-import com.example.offseequestionmodule.R;
 import com.squareup.picasso.Picasso;
 
 import org.offsee.offseequestionmodule.model.MyPair;
@@ -40,6 +40,7 @@ import org.offsee.offseequestionmodule.utils.AudioPlayer;
 import org.offsee.offseequestionmodule.utils.FontManager;
 import org.offsee.offseequestionmodule.utils.circleprogress.DonutProgress;
 import org.offsee.offseequestionmodule.webservice.ApiManagerInvoke;
+import org.offsee.offseequestionmodule.webservice.Core;
 import org.offsee.offseequestionmodule.webservice.MessageContract;
 
 import java.lang.reflect.Field;
@@ -80,15 +81,18 @@ public class QuestionActivity extends AppCompatActivity {
     ImageView soundIcon;
     boolean soundStatus = true;
     int gamePlayId = 0;
+    OnGameStatusListener onGameStatusListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_question);
+        OffseeApi.registerActivity(this);
         questions = getIntent().getParcelableArrayListExtra("qlist");
         duration = getIntent().getIntExtra("duration", 1);
         gamePlayId = getIntent().getIntExtra("gamePlay", 0);
         FontManager.instance().setTypeface(getWindow().getDecorView());
+        onGameStatusListener = OffseeApi.getOnGameStatusListener();
         initialize();
         fillQuestion(questions.get(selectedQuestion));
         audioPlayer = AudioPlayer.instance(R.raw.untitled8);
@@ -333,13 +337,13 @@ public class QuestionActivity extends AppCompatActivity {
         }
         canAnswer = false;
         int temp = 0;
-        if(v.getId() == R.id.ansTextview1){
+        if (v.getId() == R.id.ansTextview1) {
             temp = 1;
-        } else if(v.getId() == R.id.ansTextview2){
+        } else if (v.getId() == R.id.ansTextview2) {
             temp = 2;
-        } else if(v.getId() == R.id.ansTextview3){
+        } else if (v.getId() == R.id.ansTextview3) {
             temp = 3;
-        } else if(v.getId() == R.id.ansTextview4){
+        } else if (v.getId() == R.id.ansTextview4) {
             temp = 4;
         }
 
@@ -365,7 +369,7 @@ public class QuestionActivity extends AppCompatActivity {
                     Needle.onMainThread().execute(new Runnable() {
                         @Override
                         public void run() {
-                            getAnswer(assignRealAnswers.get(myPairMessageContract.data.first), finalTemp);
+                            getAnswer(assignRealAnswers.get(myPairMessageContract.data.key), finalTemp);
                             new Handler().postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
@@ -452,6 +456,10 @@ public class QuestionActivity extends AppCompatActivity {
         if (audioPlayer != null) {
             audioPlayer.stop();
         }
+        if (!isSelfFinish) {
+            onGameStatusListener.onCancel();
+        }
+        OffseeApi.unregisterActivity(this);
         super.onDestroy();
     }
 
@@ -515,21 +523,34 @@ public class QuestionActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        new AlertDialog.Builder(this)
+
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
                 .setTitle("خروج از بازی")
                 .setMessage("آیا برای خروج از بازی مطمئن هستید؟ با اینکار این بازی را از دست می دهید!")
+
                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         finish();
                     }
                 }).setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        }).show();
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).create();
+
+        TextView title = new TextView(this);
+        title.setText("خروج از بازی");
+        //title.setBackgroundResource(R.drawable);
+        title.setPadding(10, 10, 10, 10);
+        title.setGravity(Gravity.CENTER); // this is required to bring it to center.
+        title.setTextSize(22);
+        alertDialog.setCustomTitle(title);
+
+        FontManager.instance().setTypeface(alertDialog.getWindow().getDecorView());
         //super.onBackPressed();
+        alertDialog.show();
 
     }
 
@@ -549,6 +570,7 @@ public class QuestionActivity extends AppCompatActivity {
 
     }
 
+    boolean isSelfFinish = false;
 
     private void endQuestions() {
 
@@ -563,10 +585,11 @@ public class QuestionActivity extends AppCompatActivity {
                 intent.putExtra("useTime", duration - useDuration);
                 intent.putExtra("earnScore", earnScore);
                 intent.putExtra("gamePlay", gamePlayId);
-
+//                intent.putExtra("onGameStatusListener", onGameStatusListener);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
                 overridePendingTransition(0, 0);
+                isSelfFinish = true;
                 finish();
             }
         }).playOn(questionCard);
@@ -587,4 +610,6 @@ public class QuestionActivity extends AppCompatActivity {
         }
 
     }
+
+
 }

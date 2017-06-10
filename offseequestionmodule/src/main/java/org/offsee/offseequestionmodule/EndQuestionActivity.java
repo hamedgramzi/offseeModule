@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
-import com.example.offseequestionmodule.R;
+
 
 import org.offsee.offseequestionmodule.model.MyPair;
 import org.offsee.offseequestionmodule.model.Question;
@@ -25,6 +25,7 @@ import org.offsee.offseequestionmodule.utils.App;
 import org.offsee.offseequestionmodule.utils.AudioPlayer;
 import org.offsee.offseequestionmodule.utils.FontManager;
 import org.offsee.offseequestionmodule.webservice.ApiManagerInvoke;
+import org.offsee.offseequestionmodule.webservice.Core;
 import org.offsee.offseequestionmodule.webservice.MessageContract;
 
 import java.util.ArrayList;
@@ -48,11 +49,13 @@ public class EndQuestionActivity extends AppCompatActivity {
     RelativeLayout tunnelLayout;
     CardView topCardview;
     boolean soundStatus = false;
+    OnGameStatusListener onGameStatusListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_end_question);
+        OffseeApi.registerActivity(this);
         FontManager.instance().setTypefaceImmediate(getWindow().getDecorView());
         questions = getIntent().getParcelableArrayListExtra("qList");
         answrs = getIntent().getIntArrayExtra("answers");
@@ -62,6 +65,8 @@ public class EndQuestionActivity extends AppCompatActivity {
         gamePlayId = getIntent().getIntExtra("gamePlay", 0);
         soundStatus = App.sp.getBoolean(getString(R.string.pref_game_sound), true);
         initialize();
+        onGameStatusListener = OffseeApi.getOnGameStatusListener();
+
         sendToServer();
 
     }
@@ -170,6 +175,7 @@ public class EndQuestionActivity extends AppCompatActivity {
                             dataLayout.setVisibility(View.VISIBLE);
                             startButton.setEnabled(true);
                             fillData();
+                            onGameStatusListener.onComplete(rightAnswers >= QuestionSplashActivity.minQiestoin ? true : false, myPairMessageContract.data.key);
                             //change
                             //App.updateCreditFromServer();
                         }
@@ -248,5 +254,11 @@ public class EndQuestionActivity extends AppCompatActivity {
         Intent intent = new Intent(EndQuestionActivity.this, QuestionSplashActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        OffseeApi.unregisterActivity(this);
     }
 }

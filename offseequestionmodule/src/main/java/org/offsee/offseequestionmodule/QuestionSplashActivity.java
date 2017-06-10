@@ -25,8 +25,6 @@ import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
-import com.example.offseequestionmodule.R;
-import com.github.ybq.android.spinkit.style.ThreeBounce;
 
 import org.offsee.offseequestionmodule.model.GamePlayInfo;
 import org.offsee.offseequestionmodule.model.Question;
@@ -34,6 +32,7 @@ import org.offsee.offseequestionmodule.utils.App;
 import org.offsee.offseequestionmodule.utils.FontManager;
 import org.offsee.offseequestionmodule.utils.PermissionUtils;
 import org.offsee.offseequestionmodule.webservice.ApiManagerInvoke;
+import org.offsee.offseequestionmodule.webservice.Core;
 import org.offsee.offseequestionmodule.webservice.MessageContract;
 
 import java.util.ArrayList;
@@ -58,14 +57,22 @@ public class QuestionSplashActivity extends AppCompatActivity {
     ImageView soundIcon;
     boolean soundStatus = true;
     ProgressBar startProgress;
+    OnGameStatusListener onGameStatusListener;
+    boolean isSelfFinish = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_question_splash);
         App.setContext(this);
-        FontManager.instance().setTypefaceImmediate(getWindow().getDecorView());
+        OffseeApi.registerActivity(this);
+        try {
+            FontManager.instance().setTypefaceImmediate(getWindow().getDecorView());
+        } catch (Exception e) {
 
+        }
+        onGameStatusListener = OffseeApi.getOnGameStatusListener();
+        //offseeApi = (OffseeApi) getIntent().getSerializableExtra("offseeApi");
         leftBox = (ImageView) findViewById(R.id.leftBox);
         rightBox = (ImageView) findViewById(R.id.rightBox);
 
@@ -75,10 +82,10 @@ public class QuestionSplashActivity extends AppCompatActivity {
         topCardview = (CardView) findViewById(R.id.topCardview);
         tunnelLayout = (RelativeLayout) findViewById(R.id.tunnelLayout);
         startProgress = (ProgressBar) findViewById(R.id.startProgress);
-        ThreeBounce doubleBounce = new ThreeBounce();
-        doubleBounce.setBounds(0, 0, 60, 60);
-        doubleBounce.setColor(getResources().getColor(R.color.dark_gray));
-        startProgress.setIndeterminateDrawable(doubleBounce);
+//        ThreeBounce doubleBounce = new ThreeBounce();
+//        doubleBounce.setBounds(0, 0, 60, 60);
+//        doubleBounce.setColor(getResources().getColor(R.color.dark_gray));
+//        startProgress.setIndeterminateDrawable(doubleBounce);
 
         soundIcon = (ImageView) findViewById(R.id.soundIcon);
         StateListDrawable states = new StateListDrawable();
@@ -116,13 +123,8 @@ public class QuestionSplashActivity extends AppCompatActivity {
         //change
         //timeTextview.setCompoundDrawablesWithIntrinsicBounds(null, App.getIcon(TaxcityFont.Icon.icon_timer, R.color.dark_gray), null, null);
         //questionTextView.setCompoundDrawablesWithIntrinsicBounds(null, App.getIcon(TaxcityFont.Icon.icon_number_list, R.color.dark_gray), null, null);
-        try {
-            //maxQuestion = Integer.parseInt(App.settings.get("QOKQuestionNumber"));
-            //timePerQuestion = Integer.parseInt(App.settings.get("QOKTimePerQuestion"));
-            //minQiestoin = Integer.parseInt(App.settings.get("QOKMinTrueAnswer"));
-        } catch (Exception e) {
 
-        }
+
         if (enableMyLocation())
             getQuestion();
     }
@@ -138,7 +140,7 @@ public class QuestionSplashActivity extends AppCompatActivity {
             startButton.setEnabled(false);
             return;
         }
-        ApiManagerInvoke.getAllQuestions(maxQuestion, location, new GoResponseHandler<MessageContract<GamePlayInfo>>() {
+        ApiManagerInvoke.addGamePlayQOK(location, new GoResponseHandler<MessageContract<GamePlayInfo>>() {
             @Override
             public void onResponse(final MessageContract<GamePlayInfo> listMessageContract) {
                 if (listMessageContract != null && listMessageContract.isSuccess) {
@@ -254,6 +256,7 @@ public class QuestionSplashActivity extends AppCompatActivity {
                     Needle.onMainThread().execute(new Runnable() {
                         @Override
                         public void run() {
+                            onGameStatusListener.onStart(false, "");
                             YoYo.with(Techniques.SlideOutLeft).duration(chPageduration).playOn(leftBox);
                             YoYo.with(Techniques.SlideOutRight).duration(chPageduration).playOn(rightBox);
                             YoYo.with(Techniques.SlideOutLeft).duration(chPageduration).playOn(cloudLeft);
@@ -270,7 +273,9 @@ public class QuestionSplashActivity extends AppCompatActivity {
                                     intent.putParcelableArrayListExtra("qlist", list);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                     intent.putExtra("gamePlay", gamePlayId);
+                                    //intent.putExtra("offseeApi", offseeApi);
                                     intent.putExtra("duration", maxQuestion * timePerQuestion);
+                                    isSelfFinish = true;
                                     startActivity(intent);
                                     overridePendingTransition(0, 0);
                                     finish();
@@ -283,6 +288,7 @@ public class QuestionSplashActivity extends AppCompatActivity {
                     Needle.onMainThread().execute(new Runnable() {
                         @Override
                         public void run() {
+                            onGameStatusListener.onStart(true, messageContract.message);
                             Toast.makeText(App.getContext(), messageContract.message, Toast.LENGTH_SHORT).show();
                             startButton.setText(getString(R.string.startGame));
                             startButton.setEnabled(true);
@@ -297,6 +303,8 @@ public class QuestionSplashActivity extends AppCompatActivity {
                             startButton.setText(getString(R.string.startGame));
                             startButton.setEnabled(true);
                             startProgress.setVisibility(View.GONE);
+                            onGameStatusListener.onStart(true, getString(R.string.serverError));
+
                         }
                     });
                 }
@@ -352,5 +360,9 @@ public class QuestionSplashActivity extends AppCompatActivity {
             mediaPlayer.stop();
             mediaPlayer.release();
         }
+        if (!isSelfFinish) {
+            onGameStatusListener.onCancel();
+        }
+        OffseeApi.unregisterActivity(this);
     }
 }

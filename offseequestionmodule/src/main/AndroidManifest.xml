@@ -1,11 +1,26 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.offseequestionmodule">
+    package="org.offsee.offseequestionmodule">
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
-    <application android:allowBackup="true" android:label="@string/app_name"
+    <application
+        android:allowBackup="true"
+        android:label="@string/app_name"
         android:supportsRtl="true">
+
+        <activity
+            android:name="org.offsee.offseequestionmodule.QuestionActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name="org.offsee.offseequestionmodule.QuestionSplashActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name="org.offsee.offseequestionmodule.EndQuestionActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <service android:name="org.offsee.offseequestionmodule.webservice.Core"/>
 
     </application>
 

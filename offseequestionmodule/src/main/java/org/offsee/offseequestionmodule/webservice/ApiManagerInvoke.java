@@ -27,12 +27,12 @@ public class ApiManagerInvoke implements ClientDuplex {
     private static Connector connector = new Connector();
 
 
-    @GoMethodName(name = "getAllQuestion", type = GoMethodName.MethodType.invoke)
-    public static void getAllQuestions(int gamePlayId, Location location, GoResponseHandler<MessageContract<GamePlayInfo>> handler) {
+    @GoMethodName(name = "AddGamePlayQOK", type = GoMethodName.MethodType.invoke)
+    public static void addGamePlayQOK(Location location, GoResponseHandler<MessageContract<GamePlayInfo>> handler) {
         handler.setTypeToken(new TypeToken<MessageContract<GamePlayInfo>>(MessageContract.class) {
         });
 
-        connector.autoInvokeAsync(handler, gamePlayId);
+        connector.autoInvokeAsync(handler, location.getLatitude(), location.getLongitude());
     }
 
 
@@ -41,14 +41,14 @@ public class ApiManagerInvoke implements ClientDuplex {
         handler.setTypeToken(new TypeToken<MessageContract<List<Question>>>(MessageContract.class) {
         });
 
-        connector.autoInvokeAsync(handler, gamePlayId);
+        connector.autoInvokeAsync(handler, gamePlayId, 0);
     }
 
     @GoMethodName(name = "SendAnswerQOK", type = GoMethodName.MethodType.invoke)
     public static void sendAnswerQuestion(int gamePlayId, int questionId, int answer, GoResponseHandler<MessageContract<MyPair<Integer, Integer>>> handler) {
         handler.setTypeToken(new TypeToken<MessageContract<MyPair<Integer, Integer>>>(MessageContract.class) {
         });
-        connector.autoInvokeAsync(handler, gamePlayId, questionId, answer);
+        connector.autoInvokeAsync(handler, 0, gamePlayId, questionId, answer);
     }
 
     @GoMethodName(name = "FinishGamePlayQOK", type = GoMethodName.MethodType.invoke)
@@ -68,7 +68,12 @@ public class ApiManagerInvoke implements ClientDuplex {
 //        connector.autoInvokeAsync(handler, gamePlayId);
 //    }
 
-
+    @GoMethodName(name = "LoginAPI", type = GoMethodName.MethodType.invoke)
+    public static void loginApi(String key, String pass, String imei, String userId, GoResponseHandler<MessageContract<Integer>> handler) {
+        handler.setTypeToken(new TypeToken<MessageContract<Integer>>(MessageContract.class) {
+        });
+        connector.autoInvokeAsync(handler, key, pass, imei, userId);
+    }
 
     @Override
     public void getConnector(Connector connector) {

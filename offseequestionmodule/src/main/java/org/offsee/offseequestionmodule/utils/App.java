@@ -1,13 +1,13 @@
 package org.offsee.offseequestionmodule.utils;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
 import android.widget.Toast;
 
-import com.example.offseequestionmodule.R;
-
+import org.offsee.offseequestionmodule.R;
 import org.offsee.offseequestionmodule.webservice.Core;
 
 import java.util.List;
@@ -53,12 +53,22 @@ public class App {
     }
 
     public static void serverError(final Context context) {
-        Core.checkNet();
+        Core.checkNet(context);
         Needle.onMainThread().execute(new Runnable() {
             @Override
             public void run() {
                 Toast.makeText(context, R.string.serverError2, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public static boolean isMyServiceRunning(Context context,Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 }
